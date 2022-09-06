@@ -1,27 +1,38 @@
-# QRCode
+1. Installing qrcode library in the project 
+npm install angularx-qrcode -save  
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
+2. Adding QRcodeModule into the @NgModule found into the app.module.ts
 
-## Development server
+@NgModule({
+  imports: [BrowserModule, FormsModule, QRCodeModule],
+  declarations: [AppComponent, HelloComponent],
+  bootstrap: [AppComponent]
+})
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+3. Add the code below in the app.component.ts file
 
-## Code scaffolding
+export class AppComponent {
+  public myAngularxQrCode: string = ""; // the variable is in string
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+  constructor () {
+    this.myAngularxQrCode = 'https://www.youtube.com/'; // link on which it shall open
+  }
+}
 
-## Build
+4. Adding the code below in app.component.html
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+<qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode> // myAngularxQrCode is the variable on which it shall open
 
-## Running unit tests
+5. Adding SafeUrl dependency for downloading the QRcode with the onChangeUrl on in component.ts file
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+import { SafeUrl } from '@angular/platform-browser'; 
+public qrCodeDownload: SafeUrl = ""; //set safeUrl as string
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+  onChangeUrl(url: SafeUrl){
+    this.qrCodeDownload = url; //integrate url in the function
+  }
 
-## Further help
+6. adding (qrCodeURL)="onChangeUrl($event)" into app.component.html to activate the function
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+<qrcode (qrCodeURL)="onChangeUrl($event)" [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
